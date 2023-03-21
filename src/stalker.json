@@ -1,0 +1,57 @@
+{
+    "DashboardPath": "/jobs",
+    "Username": "admin",
+    "Paswword": "stalker",
+    "Slack": {
+        "Username": "Stalker",
+        "WebHookUrl": "https://hooks.slack.com/services/xxxx"
+    },
+    "Environments": [
+        {
+            "Id": "development",
+            "Url": "https://dev.myservice.com",
+            "Timeout": "00:00:10"
+        }
+    ],
+    "Groups": [
+        {
+            "Id": "Authenticate",
+            "Cron": "0 * * * *",
+            "AlwaysNotify": true,
+            "Watchers": [
+                {
+                    "Http": {
+                        "Type": "Json",
+                        "Url": "{{environment}}/token",
+                        "HttpMethod": "POST",
+                        "Content": {
+                            "Email": "ddssdsd@gmail.com",
+                            "Password": "xxxx-xxxx"
+                        },
+                        "ShouldBe": {
+                            "StatusCode": 200
+                        }
+                    }
+                },
+                {
+                    "Http": {
+                        "Type": "Json",
+                        "Url": "{{environment}}/send-notification",
+                        "HttpMethod": "POST",
+                        "Headers": {
+                            "Authorization": "Bearer {{Authenticate}}.accessToken"
+                        },
+                        "Content": {
+                            "userId": "{{Authenticate}}.userId",
+                            "email": "{{Authenticate}}.emails[0].address",
+                            "text": "Hello!"
+                        },
+                        "ShouldBe": {
+                            "StatusCode": 200
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

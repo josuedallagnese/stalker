@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  seq:
+    container_name: stalker
+    image: josofd/stalker
+    volumes:
+    - ./stalker.json:/app/stalker.json
+    ports:
+      - 99:80
+    network_mode: bridge
